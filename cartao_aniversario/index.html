@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartão de Aniversário</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+        font-family: 'Segoe UI', sans-serif;
+      }
+  
+      .envelope {
+        position: relative;
+        width: 90%;
+        max-width: 350px;
+        background: #fff;
+        border: 2px solid #e91e63;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        overflow: hidden;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+  
+      .heart {
+        font-size: 40px;
+        color: #e91e63;
+        margin-top: 10px;
+        animation: pulse 1s infinite;
+      }
+  
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+  
+      .btn {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background: #e91e63;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+  
+      .btn:hover {
+        background: #c2185b;
+      }
+
+      .cover {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #e91e63;
+        margin-top: 6px;
+      }
+
+      .rose { margin-left: 6px; }
+  
+      .mensagem {
+        display: none;
+        margin-top: 16px;
+        padding: 15px;
+        font-size: 14px;
+        color: #333;
+        background: #ffe4ec;
+        border-radius: 8px;
+        animation: fadeIn 1s forwards;
+        line-height: 1.4;
+      }
+  
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+  
+      /* Responsividade */
+      @media (max-width: 480px) {
+        .mensagem {
+          font-size: 13px;
+        }
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="envelope">
+      <div class="cover">
+        <div class="heart">❤️</div>
+        <div class="title">Marilia <span class="rose">🌹</span></div>
+      </div>
+      <button class="btn" onclick="mostrarMensagem()">Abrir Cartão 🎁</button>
+      <button class="btn" onclick="toggleMusica()">🎵 Música</button>
+      <div class="mensagem" id="mensagem">
+        Feliz aniversário para a pessoa mais lindaaa que já conheci �🥳<br>
+        Que esse novo ciclo seja cheio de alegria, saúde e tudo de melhor… Você merece, porque além de linda por fora, tem um coração que encanta e marca quem cruza seu caminho.<br>
+        Desejo que seja muito feliz, você merece o melhor do mundo. Obrigada por ter sido a melhor parte do meu ano ❤️<br>
+        Aproveita muitooo seu dia… Um bjão bem grande cheio de carinho, que papai do céu te abençoe sempre 🙌🏼😗
+      </div>
+    </div>
+  
+    <!-- Música de fundo -->
+    <audio id="musica" loop autoplay playsinline>
+      <source src="musica.mp3" type="audio/mpeg">
+      Seu navegador não suporta áudio.
+    </audio>
+  
+    <script>
+      function mostrarMensagem() {
+        document.getElementById("mensagem").style.display = "block";
+      }
+
+      function toggleMusica() {
+        const musica = document.getElementById("musica");
+        if (musica.paused) {
+          musica.play();
+        } else {
+          musica.pause();
+        }
+      }
+
+      // Try to autoplay on load. If browser blocks autoplay, show a small play button to let user start.
+      document.addEventListener('DOMContentLoaded', () => {
+        const musica = document.getElementById('musica');
+        if (!musica) return;
+        // attempt to play
+        musica.play().then(() => {
+          // autoplay started
+          hideAutoplayButton();
+        }).catch(() => {
+          // autoplay was blocked -> show manual play button
+          showAutoplayButton();
+        });
+      });
+
+      function showAutoplayButton() {
+        if (document.getElementById('autoplay-start')) return;
+        const btn = document.createElement('button');
+        btn.id = 'autoplay-start';
+        btn.textContent = 'Clique para ouvir a música 🎵';
+        btn.className = 'btn autoplay';
+        Object.assign(btn.style, {
+          position: 'fixed',
+          right: '16px',
+          bottom: '16px',
+          zIndex: 9999
+        });
+        btn.onclick = () => {
+          const musica = document.getElementById('musica');
+          musica.play().then(() => hideAutoplayButton()).catch(() => {});
+        };
+        document.body.appendChild(btn);
+      }
+
+      function hideAutoplayButton() {
+        const b = document.getElementById('autoplay-start');
+        if (b) b.remove();
+      }
+    </script>
+  </body>
+  </html>
